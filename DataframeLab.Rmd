@@ -31,6 +31,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 
 ```{r}
 
+glimpse(grants)
 
 ```
 
@@ -38,14 +39,21 @@ Because you're in an RProject, you don't need to set your working directory in R
 - Create a variable `org` that contains the `organization` column of the dataset
 
 ```{r}
+data <- read.csv("gates_donations.csv")
+glimpse(data)
 
-
+org <- data$organization
 ```
 
 
 - Confirm that the "organization" column is a vector using the `is.vector()` function. (This is a useful debugging tip if you hit errors later!)
 
 ```{r}
+gates_donations <- read.csv("gates_donations.csv", stringsAsFactors = FALSE)
+colnames(gates_donations)
+org <- gates_donations$organization  
+is.vector(org)
+
 
 
 ```
@@ -56,6 +64,8 @@ Now you can ask some interesting questions about the dataset:
 - What was the mean grant value?
 
 ```{r}
+mean_grant <- mean(grants$total_amount)
+print(mean_grant)
 
 ```
 
@@ -63,21 +73,24 @@ Now you can ask some interesting questions about the dataset:
 - What was the dollar amount of the largest grant?
 
 ```{r}
-
+largest_grant <- max(grants$total_amount)
+print(largest_grant)
 ```
 
 
 - What was the dollar amount of the smallest grant?
 
 ```{r}
-
+smallest_grant <- min(grants$total_amount)
+print(smallest_grant)
 ```
 
 
 - Which organization received the largest grant?
 
 ```{r}
-
+organization_largest_grant <- max(grants$organization)
+print(organization_largest_grant)
 
 ```
 
@@ -85,18 +98,30 @@ Now you can ask some interesting questions about the dataset:
 - Which organization received the smallest grant?
 
 ```{r}
+organization_smallest_grant <- min(grants$organization)
+print(organization_smallest_grant)
 
+grants_2010 <- grants
 ```
 
 - How many grants were awarded in 2010?
 
 ```{r}
 
+
+grants_2010 <- grants[grants$start_year == 2010, ]  
+num_grants_2010 <- nrow(grants_2010)  
+print(num_grants_2010)
+
 ```
 
 - How much was awarded in 2010? 
 
 ```{r}
+
+
+awards_2010 <- sum(grants$total_amount[grants$start_year == 2010], na.rm = TRUE)
+print(awards_2010)
 
 ```
 
@@ -123,12 +148,20 @@ Luckily, you can pass the USPersonalExpenditure variable as an argument to the `
 Do this, storing the result in a new variable
 
 ```{r}
+expenditure_df <- data.frame(USPersonalExpenditure)
 
 ```
 
 
 What are the current column names of your dataframe?
 ```{r}
+
+colnames(expenditure_df) <- gsub("[^0-9]", "", colnames(expenditure_df))
+colnames(expenditure_df) <- as.numeric(colnames(expenditure_df))
+
+
+print(colnames(expenditure_df))
+
 
 ```
 
@@ -137,6 +170,7 @@ Consider: why are they so strange? (Think about whether you could use a number l
 
 What are the current row names of your dataframe?
 ```{r}
+rownames(expenditure_df)
 
 ```
 
@@ -145,23 +179,36 @@ Add a column "Category" to your data frame that contains the rownames
 
 ```{r}
 
+expenditure_df$Category <- rownames(expenditure_df)
+
+
+print(head(expenditure_df))
+
+
 ```
 
 Consider how this data isn't tidy. Use the `pivot_longer()` function from last class to make the data tidy. 
 
 ```{r}
 
+
+
+
+
 ```
+
 
 
 How much money was spent on personal care in 1940?
 ```{r}
+
 
 ```
 
 
 How much money was spent on Food and Tobacco in 1960?
 ```{r}
+
 
 
 ```
